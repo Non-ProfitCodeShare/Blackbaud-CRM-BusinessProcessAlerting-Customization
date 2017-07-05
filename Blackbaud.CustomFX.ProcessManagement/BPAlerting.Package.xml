@@ -1,0 +1,106 @@
+<PackageSpec 
+    xmlns="bb_appfx_package"
+    xmlns:c="bb_appfx_commontypes"
+    ID="08bbc2b3-6a71-4c86-87f5-dedd9f5c75be"
+    Name="BP Alerting Package"
+    Description="A package defining specs related to bp alerting records"
+    Author="Dignity Health"
+    >
+
+	<!-- Note:  the order of the items listed here is important.  For example, you won't be able to load a data form that references 
+	a table that hasn't been loaded, etc.  In general, the following order is recommended:
+	
+		(functions and procedures first)
+		SQLFunctionSpec
+		SQLStoredProcedureSpec
+		TranslationFunctionSpec
+
+		(tables next)
+		CodeTableSpec
+		TableSpec
+		SQLViewSpec
+
+		(features next)
+		SimpleDataListSpec		
+		SearchListSpec
+		RecordOperationSpec
+		DataListSpec
+		
+		(forms next)
+		AddDataFormTemplateSpec
+		EditDataFormTemplateSpec
+		ViewDataFormTemplateSpec		
+
+		(more feature types)
+		BatchTypeSpec
+		BusinessProcessSpec
+		CalendarSpec
+		FlashDashSpec
+		GlobalChangeSpec
+		IDMapperSpec
+		KpiSpec
+		MapEntitySpec
+		MergeConfiguration
+		MergeTaskSpec
+		QueryViewSpec
+		ReportSpec
+		RelationshipMapSpec
+		SmartFieldSpec
+		SmartQuerySpec
+		WorkflowInboxSpec
+		WorkflowSpec
+		
+		(functional areas, pages, and tasks last)
+		PageDefinitionSpec
+		FunctionalAreaSpec
+		TaskSpec	
+	-->
+	
+	<c:DependencyList>
+        <c:Dependency CatalogAssembly="Blackbaud.CustomFX.ProcessManagement.dll" CatalogItem="Blackbaud.CustomFX.ProcessManagement.USR_BP_BUSINESSPROC_CUMMSTATS.Table.xml" />
+		<c:Dependency CatalogAssembly="Blackbaud.CustomFX.ProcessManagement.dll" CatalogItem="Blackbaud.CustomFX.ProcessManagement.USR_V_BP_BUSINESSPROCESS.xml" />
+        <c:Dependency CatalogAssembly="Blackbaud.CustomFX.ProcessManagement.dll" CatalogItem="Blackbaud.CustomFX.ProcessManagement.BusinessProcessesThatAlerted.DataList.xml" />
+        <c:Dependency CatalogAssembly="Blackbaud.CustomFX.ProcessManagement.dll" CatalogItem="Blackbaud.CustomFX.ProcessManagement.RunningBusinessProcessEmail.DataList.xml" />
+        <c:Dependency CatalogAssembly="Blackbaud.CustomFX.ProcessManagement.dll" CatalogItem="Blackbaud.CustomFX.ProcessManagement.RunningBusinessProcesses.DataList.xml" />
+        <c:Dependency CatalogAssembly="Blackbaud.CustomFX.ProcessManagement.dll" CatalogItem="Blackbaud.CustomFX.ProcessManagement.LoadStatsTable.GlobalChange.xml" />
+        
+    </c:DependencyList>
+
+
+
+
+	<AlterExistingPages xmlns="bb_appfx_pagedefinition" >
+		<AlterPages >
+			<AlterPage PageID="09140005-ad50-4259-b45c-376f7d0d8cbe">
+				<AlterTabs>
+					<AddTab Sequence="4">
+						<Tab ID="d582ed6f-f026-450a-8446-5e1db3540896" Caption="Running Business Processes" Visible="true">
+							<Sections>
+								<Section ID="e1af0c2b-dad0-4e8e-b3b6-e0cb5a256e8d" Caption="Running Business Processes"  >
+									<DataList ID="00231895-68cd-476d-94ad-014474897057" AutoLoadList="true">
+										<RenderStyle>
+											<StandardView></StandardView>
+										</RenderStyle>
+									</DataList>
+								</Section>
+							</Sections>
+						</Tab>
+					</AddTab>
+					<AddTab Sequence="5">
+						<Tab ID="108fadc0-c079-4241-ad3e-5c9b1dcb74c3" Caption="Business Process Alerting History" Visible="True">
+							<Sections>
+								<Section ID="461f3eb2-0246-49e8-9c71-cbb615fbe970" Caption="Business Process Alerting History" >
+									<DataList ID="e04c4726-becf-4efd-82a2-64ea25c7983b" AutoLoadList="true">
+										<RenderStyle>
+											<StandardView></StandardView>
+										</RenderStyle>
+									</DataList>
+								</Section>
+							</Sections>
+						</Tab>
+					</AddTab>
+				</AlterTabs>
+			</AlterPage>
+		</AlterPages>
+	</AlterExistingPages>
+</PackageSpec>

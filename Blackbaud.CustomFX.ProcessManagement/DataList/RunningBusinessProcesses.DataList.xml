@@ -1,0 +1,79 @@
+﻿<DataListSpec 
+	xmlns="bb_appfx_datalist"
+	xmlns:c="bb_appfx_commontypes" 
+	ID="00231895-68cd-476d-94ad-014474897057" 
+	Name="BPAlerting - Running Business Processes"
+	Description="A data list showing running business processes." 
+	Author="Nolan Regenwether"
+	c:SecurityUIFolder="ProcessManagement"
+	
+	>
+
+	<!-- indicate the server-side catalog implementation that will be used to fetch the data for the list.  This should refer to a class
+	that inherits AppCatalog.AppDataList.
+	 -->
+	<SPDataList SPName="USR_USP_DATALIST_BP_RUNNINGBUSINESSPROCESSES" >
+		<c:CreateProcedureSQL >
+			<![CDATA[
+				CREATE PROCEDURE dbo.USR_USP_DATALIST_BP_RUNNINGBUSINESSPROCESSES
+				as
+				set nocount on;
+				
+				SELECT 
+				bp.BUSPROCTYPEID as BUSPROCTYPEID, 
+				bp.BUSPROCTYPE as BUSPROCTYPE, 
+				bp.BUSPROCNAME as BUSPROCNAME, 
+				bp.STARTEDON as STARTEDON, 
+				bp.ENDEDON as ENDEDON, 
+				DATEDIFF(SECOND, bp.STARTEDON, getDATE()) as DURATION, 
+				bp.STATUS as STATUS, 
+				bp.NUMBERPROCESSED as NUMBERPROCESSED, 
+				bp.NUMBEREXCEPTIONS as NUMBEREXCEPTIONS, 
+				bp.ERRORMESSAGE as ERRORMESSAGE, 
+				stat.RUNTIMEMEAN as RUNTIMEMEAN, 
+				stat.RUNTIMESTDDEV + stat.RUNTIMEMEAN as RUNTIMESTDDEV
+				FROM (SELECT BUSPROCTYPEID, BUSPROCTYPE, BUSPROCNAME, STARTEDON, ENDEDON, NUMBERPROCESSED, NUMBEREXCEPTIONS, ERRORMESSAGE, STATUS 
+						FROM dbo.USR_V_BP_BUSINESSPROCESS WHERE STATUS = 'Running') bp 
+				LEFT OUTER JOIN dbo.USR_BP_BUSINESSPROC_CUMMSTATS stat
+					ON bp.BUSPROCTYPEID = stat.BUSPROCTYPEID 
+						AND bp.BUSPROCTYPE = stat.BUSPROCTYPENAME
+						AND bp.BUSPROCNAME = stat.BUSPROCNAME
+		
+			
+			]]>
+		</c:CreateProcedureSQL>
+	</SPDataList>
+
+	
+	
+	<!-- describe the context ID for this datalist (if applicable).  Note that the RecordIDParameter is not used for CLR data lists; the context ID
+	can be obtained in the implementing class via Me.ProcessContext.ContextRecordID. -->
+	<!--<Context ContextRecordType="REPLACE_WITH_RECORDTYPE" RecordIDParameter="DUMMYVALUE"/>-->
+
+	<!-- describe filters for the datalist (other than the context ID if specified).  These correspond to public fields on the class.  Note that 
+	system parameters like the context ID and CURRENTAPPUSERID need not be listed.  If no UI component is listed, the system will auto-generate
+	the filters based on the data type of the public field. -->
+	
+
+	
+	
+	<!-- define the output fields in the list -->
+	<Output>
+		<OutputFields>
+			<OutputField FieldID="BUSPROCTYPEID" Caption = "Business Process Type ID" DataType="Guid" IsHidden="true" />
+			<OutputField FieldID="BUSPROCTYPE" Caption = "Business Process Type" DataType="String" />
+			<OutputField FieldID="BUSPROCNAME" Caption = "Business Process Name" DataType="String" />
+			<OutputField FieldID="STARTEDON" Caption = "Started On" DataType="Date" DisplayDateAsDateTime="true"  />
+			<OutputField FieldID="ENDEDON" Caption = "Ended On" DataType="Date" DisplayDateAsDateTime="true"/>
+			<OutputField FieldID="DURATION" Caption = "Duration" DataType="Integer" />
+			<OutputField FieldID="STATUS" Caption = "Status" DataType="String" />
+			<OutputField FieldID="NUMBERPROCESSED" Caption = "Number Processed" DataType="Integer" />
+			<OutputField FieldID="NUMBEREXCEPTIONS" Caption = "Number Exceptions" DataType="Integer" />
+			<OutputField FieldID="ERRORMESSAGE" Caption = "Error Message" DataType="String" />
+			<OutputField FieldID="RUNTIMEMEAN" Caption = "Average Run Time" DataType="Integer" />
+			<OutputField FieldID="RUNTIMESTDDEV" Caption = "Alert at Run Time" DataType="Integer" />
+		</OutputFields>
+	</Output>
+
+	
+</DataListSpec>

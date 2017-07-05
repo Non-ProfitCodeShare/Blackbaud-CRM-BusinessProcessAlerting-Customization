@@ -1,0 +1,86 @@
+﻿<DataListSpec 
+	xmlns="bb_appfx_datalist"
+	xmlns:c="bb_appfx_commontypes" 
+	ID="e04c4726-becf-4efd-82a2-64ea25c7983b" 
+	Name="BPAlerting -Business Processes That Have Alerted"
+	Description="Business Processes that have alerted" 
+	Author="Nolan Regenwether"
+	c:SecurityUIFolder="ProcessManagement"
+	>
+
+	<!-- define the SP that returns the data for the datalist -->
+	<SPDataList SPName="USR_USP_DATALIST_BP_PROCESSESTHATHAVEALERTED">
+		<c:CreateProcedureSQL>
+			<![CDATA[
+create procedure dbo.USR_USP_DATALIST_BP_PROCESSESTHATHAVEALERTED
+as
+	set nocount on;
+
+	SELECT * FROM
+	(SELECT 
+	bp.BUSPROCTYPEID as BUSPROCTYPEID, 
+	bp.BUSPROCTYPE as BUSPROCTYPE, 
+	bp.BUSPROCNAME as BUSPROCNAME, 
+	bp.STARTEDON as STARTEDON, 
+	bp.ENDEDON as ENDEDON, 
+	DATEDIFF(SECOND, bp.STARTEDON, COALESCE(bp.ENDEDON, getDATE())) as DURATION, 
+	bp.STATUS as STATUS, 
+	bp.NUMBERPROCESSED as NUMBERPROCESSED, 
+	bp.NUMBEREXCEPTIONS as NUMBEREXCEPTIONS, 
+	bp.ERRORMESSAGE as ERRORMESSAGE, 
+	stat.RUNTIMEMEAN as RUNTIMEMEAN, 
+	stat.RUNTIMESTDDEV + stat.RUNTIMEMEAN as RUNTIMESTDDEV, 
+	CASE WHEN DATEDIFF(SECOND, bp.STARTEDON, coalesce(bp.endedon, getDATE())) > (stat.RUNTIMEMEAN + stat.RUNTIMESTDDEV )
+		THEN DATEADD(ss, stat.RUNTIMESTDDEV + stat.RUNTIMEMEAN , bp.STARTEDON)
+		ELSE null
+	end AS ALERTSTARTEDON, 
+	CASE WHEN DATEDIFF(SECOND, bp.STARTEDON, coalesce(bp.endedon, getDATE())) > (stat.RUNTIMEMEAN + stat.RUNTIMESTDDEV )
+		THEN bp.ENDEDON
+		ELSE NULL
+	end AS ALERTENDEDON
+	FROM ((SELECT BUSPROCTYPEID, BUSPROCTYPE, BUSPROCNAME, STARTEDON, ENDEDON, NUMBERPROCESSED, NUMBEREXCEPTIONS, ERRORMESSAGE, STATUS 
+						FROM dbo.USR_V_BP_BUSINESSPROCESS WHERE STATUS = 'Running')) bp 
+	LEFT OUTER JOIN dbo.USR_BP_BUSINESSPROC_CUMMSTATS stat
+		ON bp.BUSPROCTYPEID = stat.BUSPROCTYPEID 
+			AND bp.BUSPROCTYPE = stat.BUSPROCTYPENAME
+			AND bp.BUSPROCNAME = stat.BUSPROCNAME) bpl
+	WHERE bpl.ALERTSTARTEDON IS NOT NULL OR bpl.ALERTENDEDON IS NOT NULL AND bpl.RUNTIMEMEAN <> 0
+		
+	
+			]]>
+		</c:CreateProcedureSQL>
+	</SPDataList>
+
+	<!-- describe the context ID parameter for the SP (if applicable)-->
+	
+
+	<!-- describe any parameters (other than the context ID) defined on the SP
+	<Parameters>
+		<FormMetaData xmlns="bb_appfx_commontypes">
+			<FormFields>
+				<FormField FieldID="PARAMETER1" Caption="Paramter1" DataType="REPLACE_WITH_DATATYPE"/>
+			</FormFields>
+		</FormMetaData>
+	</Parameters>-->
+
+	<!-- define the output fields in the list -->
+	<Output>
+		<OutputFields>
+			<OutputField FieldID="BUSPROCTYPEID" Caption = "Business Process Type ID" DataType="Guid" IsHidden="true" />
+			<OutputField FieldID="BUSPROCTYPE" Caption = "Business Process Type" DataType="String" />
+			<OutputField FieldID="BUSPROCNAME" Caption = "Business Process Name" DataType="String" />
+			<OutputField FieldID="STARTEDON" Caption = "Started On" DataType="Date" DisplayDateAsDateTime="true"  />
+			<OutputField FieldID="ENDEDON" Caption = "Ended On" DataType="Date" DisplayDateAsDateTime="true"/>
+			<OutputField FieldID="DURATION" Caption = "Duration" DataType="Integer" />
+			<OutputField FieldID="STATUS" Caption = "Status" DataType="String" />
+			<OutputField FieldID="NUMBERPROCESSED" Caption = "Number Processed" DataType="Integer" />
+			<OutputField FieldID="NUMBEREXCEPTIONS" Caption = "Number Exceptions" DataType="Integer" />
+			<OutputField FieldID="ERRORMESSAGE" Caption = "Error Message" DataType="String" />
+			<OutputField FieldID="RUNTIMEMEAN" Caption = "Average Run Time" DataType="Integer" />
+			<OutputField FieldID="RUNTIMESTDDEV" Caption = "Alert at Run Time" DataType="Integer" />
+			<OutputField FieldID="ALERTSTARTEDON" Caption = "Alert Started On" DataType="Date" DisplayDateAsDateTime="true"  />
+			<OutputField FieldID="ALERTENDEDON" Caption = "Alert Ended On" DataType="Date" DisplayDateAsDateTime="true"/>
+		</OutputFields>
+	</Output>
+
+</DataListSpec>

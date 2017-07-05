@@ -1,0 +1,35 @@
+﻿<SQLViewSpec
+	xmlns="bb_appfx_sqlview"
+	xmlns:t="bb_appfx_table"
+	xmlns:c="bb_appfx_commontypes" 	
+	ID="cf99e8e7-f125-4789-8af0-0951446b4232"
+	Name="USR_V_BP_BUSINESSPROCESS"
+	Description="View for business processes"
+	Author="Nolan Regenwether"
+	DBViewName="USR_V_BP_BUSINESSPROCESS"
+	>
+
+	<CreateViewSQL>
+		<![CDATA[
+create view dbo.USR_V_BP_BUSINESSPROCESS as 
+SELECT 
+	bpc.ID as BUSPROCTYPEID,
+	bpc.NAME as BUSPROCTYPE,
+	paramsets.NAME as BUSPROCNAME,
+	bps.STARTEDON as STARTEDON, 
+	bps.ENDEDON as ENDEDON, 
+	DATEDIFF(SECOND, bps.STARTEDON, bps.ENDEDON) as DURATION, 
+	bps.STATUS as STATUS, 
+	bps.NUMBERPROCESSED as NUMBERPROCESSED,  
+	bps.NUMBEROFEXCEPTIONS as NUMBEREXCEPTIONS, 
+	bps.ERRORMESSAGE as ERRORMESSAGE
+FROM dbo.BUSINESSPROCESSCATALOG bpc
+JOIN dbo.V_BUSINESSPROCESSPARAMETERSETS paramsets
+	ON paramsets.BUSINESSPROCESSID = bpc.ID
+Join dbo.BUSINESSPROCESSSTATUS bps
+	ON bps.BUSINESSPROCESSPARAMETERSETID = paramsets.PARAMETERSETID AND bps.BUSINESSPROCESSCATALOGID = bpc.ID
+
+		]]>
+	</CreateViewSQL>
+
+</SQLViewSpec>

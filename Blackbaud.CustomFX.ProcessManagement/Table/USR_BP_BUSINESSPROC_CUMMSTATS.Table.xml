@@ -1,0 +1,36 @@
+﻿<TableSpec 
+	xmlns="bb_appfx_table"
+	xmlns:c="bb_appfx_commontypes" 
+	ID="6bd80a3f-eb7e-4142-b016-9942d591773e"
+	Name="BPAlerting - Business Process Stats"
+	Description="Stores Statistics on business process instance runs."
+	Author="Nolan Regenwether"
+	Tablename="USR_BP_BUSINESSPROC_CUMMSTATS"		   
+	IsBuiltIn="false"
+	>
+
+	<!-- define fields on the table -->
+	<Fields>
+		<GuidField Name="BUSPROCTYPEID" Description="Business Process Type ID"/>
+		<TextField Name="BUSPROCTYPENAME" Length="512" Description="Business Process Type Name"/>
+		<TextField Name="BUSPROCNAME" Length="512" Description="Business Process Instance Name"/>
+		<NumberField Name="RUNTIMEMEAN" Type="int" Description="Mean run time. " />
+		<NumberField Name="RUNTIMESTDDEV" Type="int" Description="Run time standard deviation." />
+	</Fields>
+
+	<!-- define any additional check constraints on the table -->
+	<!--<CheckConstraints>
+
+	</CheckConstraints>-->
+
+	<!-- define any indexes on the table --><!--
+	<Indexes>
+
+	</Indexes>
+		
+	--><!-- define any triggers on the table --><!--
+	<Triggers>
+
+	</Triggers>-->
+
+</TableSpec>

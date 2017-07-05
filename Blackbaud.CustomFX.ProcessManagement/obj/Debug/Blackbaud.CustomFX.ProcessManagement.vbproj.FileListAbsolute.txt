@@ -1,0 +1,5 @@
+C:\Program Files\Blackbaud\bbappfx\vroot\bin\custom\Blackbaud.CustomFX.ProcessManagement.dll
+C:\Program Files\Blackbaud\bbappfx\vroot\bin\custom\Blackbaud.CustomFX.ProcessManagement.pdb
+C:\ProjectNonDignity\ProcessManagement\Blackbaud.CustomFX.ProcessManagement\Blackbaud.CustomFX.ProcessManagement\obj\Debug\Blackbaud.CustomFX.ProcessManagement.vbprojResolveAssemblyReference.cache
+C:\ProjectNonDignity\ProcessManagement\Blackbaud.CustomFX.ProcessManagement\Blackbaud.CustomFX.ProcessManagement\obj\Debug\Blackbaud.CustomFX.ProcessManagement.dll
+C:\ProjectNonDignity\ProcessManagement\Blackbaud.CustomFX.ProcessManagement\Blackbaud.CustomFX.ProcessManagement\obj\Debug\Blackbaud.CustomFX.ProcessManagement.pdb
